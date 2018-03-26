@@ -1,1 +1,1 @@
-#App to save video ideas for content developers
+#This is an App for jotting down your next Youtube video ideas easily
