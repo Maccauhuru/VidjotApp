@@ -27,7 +27,8 @@ app.get('/', (req, res) => {
 
 // Define About Route
 app.get('/about', (req, res) => {
-  res.render('about');
+  const subtitle = "This is an App for jotting down your next Youtube video ideas easily!";
+  res.render('about',{subtitle:subtitle});
 });
 
 app.listen(port, () => console.log(`Listening to port ${port}`));
