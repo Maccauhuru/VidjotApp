@@ -1,18 +1,19 @@
 const express = require('express'),
   app = express(),
-  port = 5000 || process.env.PORT,
+  port = 5000,
   ip = process.env.IP,
   exphbs = require('express-handlebars'),
-  mongoose = require('mongoose'),
-  bodyParser = require("body-parser");
+  bodyParser = require('body-parser'),
+  mongoose = require('mongoose');
 
-  //Body Parser Middleware
+ mongoose
+   .connect('mongodb://localhost/vidjot_DB')
+   .then(() => console.log("MongoDB Finally Connected..."))
+   .catch(err => console.log(err));
+
+//Body Parser Middleware
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-
-  mongoose.connect('mongodb://localhost/vidjot_db')
-  .then(()=>console.log(`MongoDB connected!`))
-  .catch((err)=>console.log(err));
 
   //Load the Idea Model
   require ('./models/Idea');
@@ -42,23 +43,31 @@ app.get('/ideas',(req,res)=>{
 });
 
 //Process Ideas Form
-app.post('/ideas',(req,res)=>{
-let errors = [];
-if(!req.body.title){
-  errors.push({text : 'Please Add A Title'});
-}
-if(!req.body.details){
-  errors.push({text: 'Please Add Some Details'});
-}
-if(errors.length > 0){
-  res.render('ideas/add',{
-    errors:errors,
-    title:req.body.title,
-    details:req.body.details
-  });
-} else {
-  res.send("Sucessfully Posted!");
-}
+app.post("/ideas", (req, res) => {
+  let errors = [];
+
+  if (!req.body.title) {
+    errors.push({ text: "Please add a title" });
+  }
+  if (!req.body.details) {
+    errors.push({ text: "Please add some details" });
+  }
+
+  if (errors.length > 0) {
+    res.render("ideas/add", {
+      errors: errors,
+      title: req.body.title,
+      details: req.body.details
+    });
+  } else {
+    const newIdea = {
+      title: req.body.title,
+      details: req.body.details
+    };
+    new Idea(newIdea).save().then(idea => {
+      res.redirect("/ideas");
+    });
+  }
 });
 
 //Define Add Ideas Route
