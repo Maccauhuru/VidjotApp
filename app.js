@@ -39,7 +39,11 @@ app.get('/about', (req, res) => {
 
 //Define Ideas Route
 app.get('/ideas',(req,res)=>{
-  res.send('Ideas Page');
+  Idea.find({})
+  .sort({date:'desc'})
+  .then(ideas =>{
+    res.render('ideas/index',{ideas:ideas});
+  });
 });
 
 //Process Ideas Form
