@@ -112,4 +112,12 @@ app.get('/ideas/edit/:id', (req, res) => {
   });
 });
 
+//Delete Idea
+app.delete('/ideas/:id',(req,res)=>{
+ Idea.remove({_id:req.params.id})
+ .then(()=>{
+   res.redirect('/ideas');
+ });
+});
+
 app.listen(port, () => console.log(`Listening to port ${port}`));

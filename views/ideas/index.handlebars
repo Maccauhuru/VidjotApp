@@ -4,7 +4,11 @@
 <h4>{{title}}</h4>
 <p>{{details}}</p>
 <p>{{date}}</p>
-<a href="/ideas/edit/{{id}}" class="btn btn-dark block">edit</a>
+<a href="/ideas/edit/{{id}}" class="btn btn-dark block mb-2">Edit</a>
+<form method="post" action="/ideas/{{id}}?_method=DELETE">
+<input type="hidden" name="_method"value="DELETE">
+<input type="submit" class="btn btn-danger btn-block" value="Delete">
+</form>
 </div>
 
 {{else}}
