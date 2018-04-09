@@ -4,16 +4,21 @@ const express = require('express'),
   ip = process.env.IP,
   exphbs = require('express-handlebars'),
   bodyParser = require('body-parser'),
-  mongoose = require('mongoose');
+  mongoose = require('mongoose'),
+  methodOverride = require("method-override");
 
  mongoose
    .connect('mongodb://localhost/vidjot_DB')
    .then(() => console.log("MongoDB Finally Connected..."))
    .catch(err => console.log(err));
 
+
 //Body Parser Middleware
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
+
+// Method Override Middleware
+app.use(methodOverride('_method'));
 
   //Load the Idea Model
   require ('./models/Idea');
@@ -72,6 +77,23 @@ app.post("/ideas", (req, res) => {
       res.redirect("/ideas");
     });
   }
+});
+
+//Edit Form Process
+app.put('/ideas/:id',(req,res)=>{
+  Idea.findOne({
+  _id:req.params.id
+  })
+  .then(idea =>{
+    //update with new values from form
+    idea.title   = req.body.title;
+    idea.details = req.body.details;
+
+    idea.save()
+    .then(idea =>{
+      res.redirect('/ideas');
+    })
+  })
 });
 
 //Define Add Ideas Route
