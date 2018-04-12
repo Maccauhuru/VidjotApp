@@ -7,7 +7,7 @@ const express = require('express'),
   mongoose = require('mongoose'),
   methodOverride = require("method-override"),
   session = require("express-session"),
-  flash = require("flash-connect");
+  flash = require("connect-flash");
 
  mongoose
    .connect('mongodb://localhost/vidjot_DB')
@@ -48,15 +48,13 @@ app.use(flash());
 
 //Global Variables
 app.use((req,res,next)=>{
-  res.locals.success_msg = req.flash(sucess_msg);
-  res.locals.error_msg = req.flash(error_msg);
-  res.locals.error = req.flash(error);
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
   next();
 });
 
-
 /**************************************************/
-
 
 //Define Index Route
 app.get('/', (req, res) => {
@@ -102,6 +100,7 @@ app.post("/ideas", (req, res) => {
       details: req.body.details
     };
     new Idea(newIdea).save().then(idea => {
+      req.flash('success_msg','Video Idea Added!');
       res.redirect("/ideas");
     });
   }
@@ -119,6 +118,7 @@ app.put('/ideas/:id',(req,res)=>{
 
     idea.save()
     .then(idea =>{
+      req.flash('success_msg','Idea Edited Successfully!');
       res.redirect('/ideas');
     })
   })
@@ -144,6 +144,7 @@ app.get('/ideas/edit/:id', (req, res) => {
 app.delete('/ideas/:id',(req,res)=>{
  Idea.remove({_id:req.params.id})
  .then(()=>{
+   req.flash('success_msg','Video Idea Removed Successfully!');
    res.redirect('/ideas');
  });
 });
