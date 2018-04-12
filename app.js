@@ -5,14 +5,18 @@ const express = require('express'),
   exphbs = require('express-handlebars'),
   bodyParser = require('body-parser'),
   mongoose = require('mongoose'),
-  methodOverride = require("method-override");
+  methodOverride = require("method-override"),
+  session = require("express-session"),
+  flash = require("flash-connect");
 
  mongoose
    .connect('mongodb://localhost/vidjot_DB')
    .then(() => console.log("MongoDB Finally Connected..."))
    .catch(err => console.log(err));
 
-
+/**************************************************/
+/****************MIDDLEWARE************************/
+/**************************************************/
 //Body Parser Middleware
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
@@ -20,7 +24,7 @@ const express = require('express'),
 // Method Override Middleware
 app.use(methodOverride('_method'));
 
-  //Load the Idea Model
+//Load the Idea Model
   require ('./models/Idea');
   const Idea = mongoose.model('ideas');
 
@@ -29,6 +33,30 @@ app.engine('handlebars', exphbs({
   defaultLayout: 'main'
 }));
 app.set('view engine', 'handlebars');
+
+//Express Session Middleware
+app.use(
+  session({
+    secret: "secret",
+    resave:true,
+    saveUninitialized:true
+  })
+);
+
+//Flash Connect Middleware
+app.use(flash());
+
+//Global Variables
+app.use((req,res,next)=>{
+  res.locals.success_msg = req.flash(sucess_msg);
+  res.locals.error_msg = req.flash(error_msg);
+  res.locals.error = req.flash(error);
+  next();
+});
+
+
+/**************************************************/
+
 
 //Define Index Route
 app.get('/', (req, res) => {
