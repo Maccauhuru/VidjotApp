@@ -11,6 +11,7 @@ const express = require('express'),
 
   //Load Route Files
 const ideas = require('./routes/ideas');
+const users = require("./routes/users");
 
 
  mongoose
@@ -73,21 +74,10 @@ app.get('/about', (req, res) => {
 });
 
 
-//Login Route
-app.get('/users/login',(req,res,next)=>{
-  const login = 'You are Logged';
-  res.render('login',{login:login});
-});
-
-//Register Route
-app.get("/users/register", (req, res, next) => {
-  const register = "You are registered";
-  res.render('register',{register:register});
-});
-
-
 /**************************************************/
 /**************************************************/
 
 app.use('/ideas', ideas);
+app.use('/users', users);
+
 app.listen(port, () => console.log(`Listening to port ${port}`));
