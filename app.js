@@ -1,4 +1,5 @@
 const express = require('express'),
+  path = require('path'),
   app = express(),
   port = 5000,
   ip = process.env.IP,
@@ -27,6 +28,9 @@ const users = require("./routes/users");
 //Body Parser Middleware
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
+
+  //Public Static folder
+  app.use(express.static(path.join(__dirname,'public')));
 
 // Method Override Middleware
 app.use(methodOverride('_method'));
