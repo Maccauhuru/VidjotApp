@@ -11,20 +11,18 @@ const express = require('express'),
   flash = require("connect-flash");
 
   //Load Route Files
-const ideas = require('./routes/ideas');
+const ideas = require("./routes/ideas");
 const users = require("./routes/users");
-
 
  mongoose
    .connect('mongodb://localhost/vidjot_DB')
    .then(() => console.log("MongoDB Finally Connected..."))
    .catch(err => console.log(err));
 
-
-
 /**************************************************/
 /****************MIDDLEWARE************************/
 /**************************************************/
+
 //Body Parser Middleware
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
