@@ -44,22 +44,22 @@ router.post("/register", (req, res) => {
       email:req.body.email,
       password:req.body.password
   });
-bcrypt.genSalt(10,(err,salt)=>{
-bcrypt.hash(newUser.password, salt, (err, hash) => {
-if (err) throw error;
-newUser.password = hash;
-newUser.save()
-.then(user => {
-  req.flash(success_msg, "You are now registred!");
-  res.redirect("/users/login");
-})
-.catch(err =>{
-  console.log("Registration unsuccessfull..please try again!");
-  return;
-});
-});
-
-});
+          bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(newUser.password, salt, (err, hash) => {
+              if (err) throw err;
+              newUser.password = hash;
+              newUser
+                .save()
+                .then(user => {
+                  req.flash("succes_msg", "You are now registered and can log in");
+                  res.redirect("/users/login");
+                })
+                .catch(err => {
+                  console.log(err);
+                  return;
+                });
+            });
+          });
   }
 });
 module.exports = router;
