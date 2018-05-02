@@ -8,11 +8,15 @@ const express = require('express'),
   mongoose = require('mongoose'),
   methodOverride = require("method-override"),
   session = require("express-session"),
-  flash = require("connect-flash");
+  flash = require("connect-flash"),
+  passport = require('passport');
 
   //Load Route Files
 const ideas = require("./routes/ideas");
 const users = require("./routes/users");
+
+//Passport Config
+require("./config/passport")(passport);
 
  mongoose
    .connect('mongodb://localhost/vidjot_DB')
