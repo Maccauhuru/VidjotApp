@@ -7,10 +7,10 @@ const router = express.Router();
 //Load the User model
 require("../models/User");
 const User = mongoose.model("users");
+
 //Login Route
-router.get("/login", (req, res, next) => {
-  const login = "You are Logged";
-  res.render("users/login", { login: login });
+router.get('/login', (req, res) => {
+  res.render('users/login');
 });
 
 //Register Route
@@ -23,7 +23,7 @@ router.get("/register", (req, res, next) => {
 router.post("/login",(req,res,next)=>{
  passport.authenticate('local',{
    successRedirect : '/ideas',
-   failureRedirect : 'users/login',
+   failureRedirect: '/users/login',
    failureFlash : true
  })(req,res,next);
 })
